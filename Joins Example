@@ -1,0 +1,38 @@
+# The query uses Joins to relate between tables, to retrieve the top 5 customers from the top 10 cities who’ve paid the highest total amounts to Rockbuster.
+
+--the top 5 customers from the top 10 cities who’ve paid the highest total amounts to Rockbuster.
+SELECT A.customer_id, A.first_name,A.last_name,D.country,C.city,SUM(E.amount) AS "total_Amount_paid"
+FROM customer A
+LEFT JOIN payment E ON A.customer_id=E.customer_id
+LEFT JOIN address B ON A.address_id=B.address_id
+LEFT JOIN city C ON B.city_id=C.city_id
+LEFT JOIN country D ON C.country_id=D.country_id
+WHERE C.city IN
+	(
+
+--top 10 cities that fall within the top 10 countries you identified in step 1
+	SELECT C.city
+	FROM customer A
+	LEFT JOIN address B ON A.address_id=B.address_id
+	LEFT JOIN city C ON B.city_id=C.city_id
+	LEFT JOIN country D ON C.country_id=D.country_id
+	WHERE D.country IN
+		(
+			
+--top 10 countries for Rockbuster in terms of customer numbers. 
+		SELECT D.country
+		FROM customer A
+		LEFT JOIN address B ON A.address_id=B.address_id
+		LEFT JOIN city C ON B.city_id=C.city_id
+		LEFT JOIN country D ON C.country_id=D.country_id
+		GROUP BY D.country
+		ORDER BY COUNT(A.customer_id) DESC
+		LIMIT 10
+		)
+	GROUP BY D.country,C.city
+	ORDER BY COUNT(A.customer_id) DESC
+	LIMIT 10
+	)
+GROUP BY D.country, C.city,A.customer_id, A.first_name,A.last_name
+ORDER BY SUM(E.amount) DESC
+LIMIT 5
