@@ -1,1 +1,1 @@
-# miniature-octo-waddle
+My projects include data mining, Python scripts and visuals, and SQL queries. Rockbuster project folder includes data loading, database management, SQL analysis, and documentation. In the Instacart project, it includes, data collection, data cleaning and preparation, and expoloratory data analysis. # miniature-octo-waddle
